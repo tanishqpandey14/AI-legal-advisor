@@ -8,6 +8,10 @@
     {
       "src": "api/reset.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "Front-End/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -18,6 +22,10 @@
     {
       "src": "/api/reset",
       "dest": "/api/reset.js"
+    },
+    {
+      "src": "/",
+      "dest": "/Front-End/index.html"
     },
     {
       "src": "/(.*)",
