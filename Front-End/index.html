@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nyay Mitra - न्याय मित्र</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">⚖️</div>
+      <div>
+        <div class="title">Nyay Mitra <span class="title-hindi">न्याय मित्र</span></div>
+        <div class="subtitle">🇮🇳 Your Free Indian Legal AI Assistant</div>
+      </div>
+    </div>
+    <div class="status">
+      <div class="status-dot"></div>
+      <span>Online</span>
+    </div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="chat-area" id="chatArea">
+
+    <!-- Welcome Message -->
+    <div class="message bot-message">
+      <div class="avatar">⚖️</div>
+      <div class="bubble">
+        🙏 <strong>Namaste!</strong> Main <strong>Nyay Mitra</strong> hoon — aapka free AI legal assistant.<br><br>
+        Aap mujhe apni koi bhi legal problem batayein — property dispute, police complaint, job issue, family matter — main aapko relevant <strong>Indian laws aur sahi steps</strong> bataunga.<br><br>
+        Neeche se koi topic chunein ya apni problem likhein 👇
+      </div>
+    </div>
+
+    <!-- Category Buttons -->
+    <div class="categories" id="categories">
+      <div class="category-btn" onclick="askCategory('My landlord is not returning my security deposit after I vacated the house.')">🏠 Property Dispute</div>
+      <div class="category-btn" onclick="askCategory('Police is refusing to register my FIR. What should I do?')">👮 Police / FIR</div>
+      <div class="category-btn" onclick="askCategory('My employer has not paid my salary for 3 months.')">💼 Job / Labour</div>
+      <div class="category-btn" onclick="askCategory('I bought a defective product and the company is not giving refund.')">🛒 Consumer Rights</div>
+      <div class="category-btn" onclick="askCategory('My husband is physically abusing me. What legal options do I have?')">👨‍👩‍👧 Family / Divorce</div>
+      <div class="category-btn" onclick="askCategory('Someone is blackmailing me using my private photos on WhatsApp.')">💻 Cyber Crime</div>
+      <div class="category-btn" onclick="askCategory('How do I file an RTI to get information from a government office?')">📄 RTI / Govt</div>
+      <div class="category-btn" onclick="focusInput()">⚖️ Other Issue</div>
+    </div>
+
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    ⚠️ Yeh AI-based samanya kanooni jaankari hai, professional legal advice nahi. Court matters ke liye advocate se milein.
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <textarea
+      id="userInput"
+      placeholder="Apni legal problem yahan likhein... (Hindi ya English dono chalega)"
+      rows="1"
+      onkeydown="handleKey(event)"
+      oninput="autoResize(this)"
+    ></textarea>
+    <button id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html> 
