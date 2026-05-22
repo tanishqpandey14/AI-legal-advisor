@@ -3,70 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nyay Mitra - न्याय मित्र</title>
+  <title>AI Legal Advisor</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
   <!-- Header -->
-  <div class="header">
+  <header class="header">
     <div class="header-left">
       <div class="logo">⚖️</div>
-      <div>
-        <div class="title">Nyay Mitra <span class="title-hindi">न्याय मित्र</span></div>
-        <div class="subtitle">🇮🇳 Your Free Indian Legal AI Assistant</div>
+      <div class="header-text">
+        <h1 class="app-title">AI Legal Advisor</h1>
+        <p class="app-subtitle">Indian Legal Guidance</p>
       </div>
     </div>
-    <div class="status">
-      <div class="status-dot"></div>
-      <span>Online</span>
+    <div class="header-right">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+      <button class="reset-btn" onclick="resetChat()">🔄 New Chat</button>
     </div>
-  </div>
+  </header>
 
-  <!-- Chat Area -->
-  <div class="chat-area" id="chatArea">
+  <!-- Main -->
+  <main class="main">
 
-    <!-- Welcome Message -->
-    <div class="message bot-message">
-      <div class="avatar">⚖️</div>
-      <div class="bubble">
-        🙏 <strong>Namaste!</strong> Main <strong>Nyay Mitra</strong> hoon — aapka free AI legal assistant.<br><br>
-        Aap mujhe apni koi bhi legal problem batayein — property dispute, police complaint, job issue, family matter — main aapko relevant <strong>Indian laws aur sahi steps</strong> bataunga.<br><br>
-        Neeche se koi topic chunein ya apni problem likhein 👇
+    <!-- Chat Area -->
+    <div class="chat-area" id="chatArea">
+
+      <!-- Welcome -->
+      <div class="welcome-card" id="welcomeCard">
+        <div class="welcome-icon">⚖️</div>
+        <h2 class="welcome-title">Your Personal Legal Advisor</h2>
+        <p class="welcome-text">
+          Get instant guidance on Indian laws, your legal rights, and the exact steps to take - completely free.
+        </p>
+        <p class="welcome-subtext">
+          Describe your legal problem in English or Hindi. I will handle the rest.
+        </p>
+        <div class="welcome-tags">
+          <span class="tag">IPC / BNS</span>
+          <span class="tag">Consumer Rights</span>
+          <span class="tag">RTI</span>
+          <span class="tag">Labour Law</span>
+          <span class="tag">Cyber Crime</span>
+          <span class="tag">Family Law</span>
+        </div>
       </div>
+
+      <!-- Section Label -->
+      <div class="section-label" id="sectionLabel">Select a topic or type your problem below</div>
+
+      <!-- Categories -->
+      <div class="categories" id="categories">
+        <div class="category-card" onclick="askCategory('My landlord is not returning my security deposit after I vacated the house. What are my legal options?')">
+          <span class="cat-icon">🏠</span>
+          <span class="cat-label">Property Dispute</span>
+        </div>
+        <div class="category-card" onclick="askCategory('Police is refusing to register my FIR. What should I do legally?')">
+          <span class="cat-icon">👮</span>
+          <span class="cat-label">Police / FIR</span>
+        </div>
+        <div class="category-card" onclick="askCategory('My employer has not paid my salary for 3 months and is threatening to fire me.')">
+          <span class="cat-icon">💼</span>
+          <span class="cat-label">Job / Labour</span>
+        </div>
+        <div class="category-card" onclick="askCategory('I bought a defective product online and the company is refusing to give a refund.')">
+          <span class="cat-icon">🛒</span>
+          <span class="cat-label">Consumer Rights</span>
+        </div>
+        <div class="category-card" onclick="askCategory('I am facing domestic violence at home. What are my legal rights and options?')">
+          <span class="cat-icon">🏛️</span>
+          <span class="cat-label">Domestic Violence</span>
+        </div>
+        <div class="category-card" onclick="askCategory('Someone is blackmailing me using my private photos on WhatsApp. What legal action can I take?')">
+          <span class="cat-icon">💻</span>
+          <span class="cat-label">Cyber Crime</span>
+        </div>
+        <div class="category-card" onclick="askCategory('How do I file an RTI to get information from a government office?')">
+          <span class="cat-icon">📄</span>
+          <span class="cat-label">RTI / Govt</span>
+        </div>
+        <div class="category-card" onclick="focusInput()">
+          <span class="cat-icon">⚖️</span>
+          <span class="cat-label">Other Issue</span>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Category Buttons -->
-    <div class="categories" id="categories">
-      <div class="category-btn" onclick="askCategory('My landlord is not returning my security deposit after I vacated the house.')">🏠 Property Dispute</div>
-      <div class="category-btn" onclick="askCategory('Police is refusing to register my FIR. What should I do?')">👮 Police / FIR</div>
-      <div class="category-btn" onclick="askCategory('My employer has not paid my salary for 3 months.')">💼 Job / Labour</div>
-      <div class="category-btn" onclick="askCategory('I bought a defective product and the company is not giving refund.')">🛒 Consumer Rights</div>
-      <div class="category-btn" onclick="askCategory('My husband is physically abusing me. What legal options do I have?')">👨‍👩‍👧 Family / Divorce</div>
-      <div class="category-btn" onclick="askCategory('Someone is blackmailing me using my private photos on WhatsApp.')">💻 Cyber Crime</div>
-      <div class="category-btn" onclick="askCategory('How do I file an RTI to get information from a government office?')">📄 RTI / Govt</div>
-      <div class="category-btn" onclick="focusInput()">⚖️ Other Issue</div>
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      Note: This AI provides general legal information only not professional legal advice. For court matters, consult a qualified advocate.
     </div>
 
-  </div>
+    <!-- Input Area -->
+    <div class="input-wrapper">
+      <div class="input-box">
+        <textarea
+          id="userInput"
+          placeholder="Describe your problem here..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button id="sendBtn" onclick="sendMessage()" title="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <p class="input-footer">AI Legal Advisor</p>
+    </div>
 
-  <!-- Disclaimer -->
-  <div class="disclaimer">
-    ⚠️ Yeh AI-based samanya kanooni jaankari hai, professional legal advice nahi. Court matters ke liye advocate se milein.
-  </div>
-
-  <!-- Input Area -->
-  <div class="input-area">
-    <textarea
-      id="userInput"
-      placeholder="Apni legal problem yahan likhein... (Hindi ya English dono chalega)"
-      rows="1"
-      onkeydown="handleKey(event)"
-      oninput="autoResize(this)"
-    ></textarea>
-    <button id="sendBtn" onclick="sendMessage()">➤</button>
-  </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
-</html> 
+</html>

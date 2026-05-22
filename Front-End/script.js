@@ -1,6 +1,6 @@
 // ── Configuration ──
-const BACKEND_URL = "/api/chat";
-const RESET_URL = "/api/reset";
+const BACKEND_URL = "http://127.0.0.1:3000/chat";
+const RESET_URL = "http://127.0.0.1:3000/reset";
 
 // ── State ──
 let isLoading = false;
@@ -26,47 +26,44 @@ function handleKey(event) {
 // ── Auto Resize Textarea ──
 function autoResize(textarea) {
   textarea.style.height = "auto";
-  textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+  textarea.style.height = Math.min(textarea.scrollHeight, 130) + "px";
 }
 
 // ── Category Quick Button ──
 function askCategory(question) {
-  // Hide category buttons
-  const categories = document.getElementById("categories");
-  if (categories) categories.style.display = "none";
-
-  // Set input and send
+  hideWelcome();
   document.getElementById("userInput").value = question;
   sendMessage();
+}
+
+// ── Hide Welcome & Categories ──
+function hideWelcome() {
+  const welcome = document.querySelector(".welcome-card");
+  const label = document.querySelector(".section-label");
+  const categories = document.getElementById("categories");
+  if (welcome) welcome.style.display = "none";
+  if (label) label.style.display = "none";
+  if (categories) categories.style.display = "none";
 }
 
 // ── Send Message ──
 async function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
-
   if (!text || isLoading) return;
 
-  // Hide categories
-  const categories = document.getElementById("categories");
-  if (categories) categories.style.display = "none";
+  hideWelcome();
 
-  // Clear input
   input.value = "";
   input.style.height = "auto";
 
-  // Show user message
   addUserMessage(text);
-
-  // Show typing indicator
   showTyping();
 
-  // Disable send button
   isLoading = true;
   document.getElementById("sendBtn").disabled = true;
 
   try {
-    // Call our backend
     const response = await fetch(BACKEND_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -74,8 +71,6 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-
-    // Remove typing indicator
     removeTyping();
 
     if (data.reply) {
@@ -86,84 +81,126 @@ async function sendMessage() {
 
   } catch (error) {
     removeTyping();
-    addBotMessage("⚠️ Server se connect nahi ho pa raha. Kripya backend start karein.");
+    addBotMessage("Backend not Started");
   }
 
-  // Re-enable send button
   isLoading = false;
   document.getElementById("sendBtn").disabled = false;
   focusInput();
 }
 
-// ── Add User Message to Chat ──
+// ── Reset Chat ──
+async function resetChat() {
+  try {
+    await fetch(RESET_URL, { method: "POST" });
+  } catch (e) {}
+
+  const chatArea = document.getElementById("chatArea");
+  chatArea.innerHTML = `
+    <div class="welcome-card" id="welcomeCard">
+      <div class="welcome-icon">⚖️</div>
+      <h2 class="welcome-title">Your Personal Legal Advisor</h2>
+      <p class="welcome-text">
+        Get instant guidance on Indian laws, your legal rights, and the exact steps to take — completely free.
+      </p>
+      <p class="welcome-subtext">
+        Describe your legal problem in English or Hindi. I will handle the rest.
+      </p>
+      <div class="welcome-tags">
+        <span class="tag">IPC / BNS</span>
+        <span class="tag">Consumer Rights</span>
+        <span class="tag">RTI</span>
+        <span class="tag">Labour Law</span>
+        <span class="tag">Cyber Crime</span>
+        <span class="tag">Family Law</span>
+      </div>
+    </div>
+    <div class="section-label" id="sectionLabel">Select a topic or type your problem below</div>
+    <div class="categories" id="categories">
+      <div class="category-card" onclick="askCategory('My landlord is not returning my security deposit after I vacated the house. What are my legal options?')">
+        <span class="cat-icon">🏠</span><span class="cat-label">Property Dispute</span>
+      </div>
+      <div class="category-card" onclick="askCategory('Police is refusing to register my FIR. What should I do legally?')">
+        <span class="cat-icon">👮</span><span class="cat-label">Police / FIR</span>
+      </div>
+      <div class="category-card" onclick="askCategory('My employer has not paid my salary for 3 months and is threatening to fire me.')">
+        <span class="cat-icon">💼</span><span class="cat-label">Job / Labour</span>
+      </div>
+      <div class="category-card" onclick="askCategory('I bought a defective product online and the company is refusing to give a refund.')">
+        <span class="cat-icon">🛒</span><span class="cat-label">Consumer Rights</span>
+      </div>
+      <div class="category-card" onclick="askCategory('I am facing domestic violence at home. What are my legal rights and options?')">
+        <span class="cat-icon">🏛️</span><span class="cat-label">Domestic Violence</span>
+      </div>
+      <div class="category-card" onclick="askCategory('Someone is blackmailing me using my private photos on WhatsApp. What legal action can I take?')">
+        <span class="cat-icon">💻</span><span class="cat-label">Cyber Crime</span>
+      </div>
+      <div class="category-card" onclick="askCategory('How do I file an RTI to get information from a government office?')">
+        <span class="cat-icon">📄</span><span class="cat-label">RTI / Govt</span>
+      </div>
+      <div class="category-card" onclick="focusInput()">
+        <span class="cat-icon">⚖️</span><span class="cat-label">Other Issue</span>
+      </div>
+    </div>
+  `;
+  focusInput();
+}
+
+// ── Add User Message ──
 function addUserMessage(text) {
   const chatArea = document.getElementById("chatArea");
-
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", "user-message");
-
-  messageDiv.innerHTML = `
+  const div = document.createElement("div");
+  div.classList.add("message", "user-message");
+  div.innerHTML = `
     <div class="user-bubble">${escapeHTML(text)}</div>
     <div class="user-avatar">👤</div>
   `;
-
-  chatArea.appendChild(messageDiv);
+  chatArea.appendChild(div);
   scrollToBottom();
 }
 
-// ── Add Bot Message to Chat ──
+// ── Add Bot Message ──
 function addBotMessage(text) {
   const chatArea = document.getElementById("chatArea");
-
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", "bot-message");
-
-  // Format the text (bold, line breaks)
-  const formatted = formatText(text);
-
-  messageDiv.innerHTML = `
+  const div = document.createElement("div");
+  div.classList.add("message", "bot-message");
+  div.innerHTML = `
     <div class="avatar">⚖️</div>
-    <div class="bubble">${formatted}</div>
+    <div class="bubble">${formatText(text)}</div>
   `;
-
-  chatArea.appendChild(messageDiv);
+  chatArea.appendChild(div);
   scrollToBottom();
 }
 
-// ── Show Typing Indicator ──
+// ── Show Typing ──
 function showTyping() {
   const chatArea = document.getElementById("chatArea");
-
-  const typingDiv = document.createElement("div");
-  typingDiv.classList.add("typing");
-  typingDiv.id = "typingIndicator";
-
-  typingDiv.innerHTML = `
+  const div = document.createElement("div");
+  div.classList.add("typing");
+  div.id = "typingIndicator";
+  div.innerHTML = `
     <div class="avatar">⚖️</div>
-    <div class="typing-dots">
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="typing-bubble">
+      <span></span><span></span><span></span>
     </div>
   `;
-
-  chatArea.appendChild(typingDiv);
+  chatArea.appendChild(div);
   scrollToBottom();
 }
 
-// ── Remove Typing Indicator ──
+// ── Remove Typing ──
 function removeTyping() {
-  const typing = document.getElementById("typingIndicator");
-  if (typing) typing.remove();
+  const el = document.getElementById("typingIndicator");
+  if (el) el.remove();
 }
 
-// ── Scroll Chat to Bottom ──
+// ── Scroll to Bottom ──
 function scrollToBottom() {
   const chatArea = document.getElementById("chatArea");
   chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// ── Format Text (bold, line breaks) ──
+// ── Format Text ──
 function formatText(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -174,10 +211,35 @@ function formatText(text) {
     .replace(/\n/g, "<br/>");
 }
 
-// ── Escape HTML (for user messages) ──
+// ── Escape HTML ──
 function escapeHTML(text) {
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+
+// ── Theme Toggle ──
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById("themeBtn");
+
+  if (body.classList.contains("light")) {
+    body.classList.remove("light");
+    btn.textContent = "🌙 Dark";
+    localStorage.setItem("theme", "dark");
+  } else {
+    body.classList.add("light");
+    btn.textContent = "☀️ Light";
+    localStorage.setItem("theme", "light");
+  }
+}
+
+// ── Load Saved Theme on Start ──
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem("theme");
+  if (saved === "light") {
+    document.body.classList.add("light");
+    document.getElementById("themeBtn").textContent = "☀️ Light";
+  }
+});
