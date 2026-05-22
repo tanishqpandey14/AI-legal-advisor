@@ -78,7 +78,6 @@ async function sendMessage() {
     } else {
       addBotMessage("⚠️ Kuch galat hua. Please dobara try karein.");
     }
-
   } catch (error) {
     removeTyping();
     addBotMessage("Backend not Started");

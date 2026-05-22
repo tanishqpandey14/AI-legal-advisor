@@ -85,10 +85,7 @@ app.post("/chat", async (req, res) => {
     // Call Groq API
     const response = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        ...chatHistory,
-      ],
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...chatHistory],
       temperature: 0.7,
       max_tokens: 1024,
     });
@@ -107,7 +104,6 @@ app.post("/chat", async (req, res) => {
     }
 
     res.json({ reply });
-
   } catch (error) {
     console.error("Groq Error:", error.message);
     res.status(500).json({ error: "Not able to Connect with AI." });
