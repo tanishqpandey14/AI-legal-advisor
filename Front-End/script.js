@@ -1,5 +1,6 @@
 // ── Configuration ──
-const BACKEND_URL = "http://127.0.0.1:3000/chat";
+const BACKEND_URL = "/api/chat";
+const RESET_URL = "/api/reset";
 
 // ── State ──
 let isLoading = false;
