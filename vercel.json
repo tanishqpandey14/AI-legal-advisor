@@ -1,13 +1,27 @@
 {
   "version": 2,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "src": "api/chat.js",
+      "use": "@vercel/node"
     },
     {
-      "source": "/(.*)",
-      "destination": "/Front-End/$1"
+      "src": "api/reset.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/chat",
+      "dest": "/api/chat.js"
+    },
+    {
+      "src": "/api/reset",
+      "dest": "/api/reset.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Front-End/$1"
     }
   ]
 }
