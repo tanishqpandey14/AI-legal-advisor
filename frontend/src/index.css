@@ -1,78 +1,9 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* ══════════════════════════════════════════
-   Design tokens — "Clarity Desk"
-   Warm neutral paper + deep emerald, single
-   clean light theme. Space Grotesk + Inter.
-   ══════════════════════════════════════════ */
-:root {
-  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
-  --font-body: "Inter", "Segoe UI", sans-serif;
-
-  --bg: #f6f7f3;
-  --bg-card: #ffffff;
-  --bg-subtle: #eef1ea;
-  --bg-hover: #e6ebe0;
-  --ink: #12201a;
-  --text: #3c4a3f;
-  --text-dim: #7d8a7f;
-  --accent: #1f6f4a;
-  --accent-bright: #24865a;
-  --accent-soft: #e1f0e6;
-  --amber: #b97a2b;
-  --amber-soft: #f7ecdc;
-  --border: #dde3d6;
-  --user-bubble: #1f6f4a;
-  --bot-bubble: #ffffff;
-
-  --radius-lg: 22px;
-  --radius: 16px;
-  --radius-sm: 11px;
-  --shadow-sm: 0 2px 8px rgba(18, 32, 26, 0.05);
-  --shadow: 0 12px 32px rgba(18, 32, 26, 0.08);
-}
-
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-::selection {
-  background: var(--accent-soft);
-  color: var(--ink);
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-button {
-  font-family: inherit;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
+@layer base {
+  body {
+    @apply transition-colors duration-200;
   }
 }

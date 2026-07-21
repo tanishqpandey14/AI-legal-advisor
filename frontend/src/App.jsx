@@ -1,111 +1,28 @@
-import { useEffect, useRef, useState } from "react";
-import Header from "./components/Header.jsx";
-import Welcome from "./components/Welcome.jsx";
-import Message from "./components/Message.jsx";
-import TypingIndicator from "./components/TypingIndicator.jsx";
-import Composer from "./components/Composer.jsx";
-import "./App.css";
-
-// Set VITE_API_URL in a .env file (local) or in Vercel's project env vars
-// (production) to your Render backend's base URL, e.g.
-// https://your-backend.onrender.com
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
-const BACKEND_URL = `${API_BASE}/chat`;
-const RESET_URL = `${API_BASE}/reset`;
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Chat from './pages/Chat';
+import About from './pages/About';
 
 export default function App() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const chatAreaRef = useRef(null);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  function scrollToBottom() {
-    const el = chatAreaRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }
-
-  async function send(rawText) {
-    const text = (rawText ?? input).trim();
-    if (!text || isLoading) return;
-
-    setInput("");
-    if (inputRef.current) inputRef.current.style.height = "auto";
-
-    setMessages((m) => [...m, { role: "user", text }]);
-    setIsTyping(true);
-    setIsLoading(true);
-
-    try {
-      const res = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
-      });
-      const data = await res.json();
-      setIsTyping(false);
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: data.reply || "Something went wrong. Please try again." },
-      ]);
-    } catch {
-      setIsTyping(false);
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: "Backend not reachable. Please try again shortly." },
-      ]);
-    }
-
-    setIsLoading(false);
-    inputRef.current?.focus();
-  }
-
-  async function resetChat() {
-    try {
-      await fetch(RESET_URL, { method: "POST" });
-    } catch {
-      /* ignore */
-    }
-    setMessages([]);
-    setInput("");
-    inputRef.current?.focus();
-  }
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className="app-shell">
-      <Header onReset={resetChat} />
-
-      <main className="main">
-        <div className="chat-area" ref={chatAreaRef}>
-          {messages.length === 0 && (
-            <Welcome onPick={(prompt) => send(prompt)} onFocusInput={() => inputRef.current?.focus()} />
-          )}
-
-          {messages.map((m, i) => (
-            <Message key={i} role={m.role} text={m.text} />
-          ))}
-
-          {isTyping && <TypingIndicator />}
+    <div className={darkMode ? 'dark' : ''}>
+      <Router>
+        <div className="h-screen flex flex-col bg-[#FCFBFA] dark:bg-slate-900 transition-colors overflow-hidden">
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+          
+          <main className="flex-1 overflow-hidden flex flex-col">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </main>
         </div>
-
-        <Composer
-          value={input}
-          onChange={setInput}
-          onSend={() => send()}
-          disabled={isLoading}
-          inputRef={inputRef}
-        />
-      </main>
+      </Router>
     </div>
   );
 }
