@@ -1,3 +1,5 @@
 Back-End/.env
 Back-End/node_modules/
+Front-End/node_modules/
+Front-End/dist/
 node_modules/

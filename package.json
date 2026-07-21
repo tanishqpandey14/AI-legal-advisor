@@ -1,9 +1,9 @@
 {
   "name": "ai-legal-advisor",
   "version": "1.0.0",
+  "private": true,
+  "description": "Vercel serverless functions for AI Legal Advisor (api/chat.js, api/reset.js)",
   "dependencies": {
-    "groq-sdk": "^0.9.0",
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "groq-sdk": "^1.1.2"
   }
 }
