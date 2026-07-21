@@ -6,8 +6,12 @@ import TypingIndicator from "./components/TypingIndicator.jsx";
 import Composer from "./components/Composer.jsx";
 import "./App.css";
 
-const BACKEND_URL = "/api/chat";
-const RESET_URL = "/api/reset";
+// Set VITE_API_URL in a .env file (local) or in Vercel's project env vars
+// (production) to your Render backend's base URL, e.g.
+// https://your-backend.onrender.com
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const BACKEND_URL = `${API_BASE}/chat`;
+const RESET_URL = `${API_BASE}/reset`;
 
 export default function App() {
   const [messages, setMessages] = useState([]);
