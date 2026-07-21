@@ -74,7 +74,7 @@ export default function Chat() {
         ...newMessages,
         {
           role: 'assistant',
-          content: '⚠️ Could not connect to the backend server. Please make sure your backend server is running and GROQ_API_KEY is configured.',
+          content: 'Could not connect to the backend server. Please try again later',
         },
       ]);
     } finally {
